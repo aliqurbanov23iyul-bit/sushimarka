@@ -104,3 +104,27 @@ document.querySelectorAll('.card, .feat, .cat').forEach(card => {
     card.style.transform = '';
   });
 });
+
+// ── Mobile hamburger menu ──
+document.querySelectorAll('.hamburger').forEach(btn => {
+  const nav = btn.closest('.nav');
+  const links = nav && nav.querySelector('.links');
+  if (!links) return;
+  const closeMenu = () => {
+    links.classList.remove('mobile-open');
+    btn.classList.remove('open');
+    btn.setAttribute('aria-expanded','false');
+    btn.setAttribute('aria-label','Menyunu aç');
+  };
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    const open = !links.classList.contains('mobile-open');
+    links.classList.toggle('mobile-open', open);
+    btn.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', open ? 'Menyunu bağla' : 'Menyunu aç');
+  });
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+  document.addEventListener('click', e => { if (!nav.contains(e.target)) closeMenu(); });
+  window.addEventListener('resize', () => { if (innerWidth > 820) closeMenu(); });
+});
